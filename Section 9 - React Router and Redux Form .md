@@ -273,7 +273,33 @@ ee.na @ js:116
 -- success screenshots taken at genie local desktop at 731
 
 
-122. Route Design6:31123. Our First Route Definition5:57124. State as an Object9:07
+122. Route Design6:31
+
+-- name doesnt have to match for compnent and path names
+
+route:/
+component: {PostsIndex}
+-- main route is the slash or root /
+
+Route: /posts/* (wildcard)
+component: PostsShow
+--- might look like this:
+  <Route path="/posts/:id" component={PostsShow} />
+-- colon tells router to be kind of a fuzzy match or a kind of a wildcard
+-- so if a user tries to goto post/1 or post/1 or post/3 whatever it might be,
+  react router is going to consider that /1 or /2 to be a wildcard and its going to try to 
+  greedily match that route against this component right here.
+  -- PostsShow component is going to be responsible for fetching a very particular post and showing it on the screen.
+   
+Route: /posts/new
+Component: PostsNew
+-- the last route is all about showing or not showing a component to the user that they can use to create brand new post.
+--route something like /posts/new
+
+
+123. Our First Route Definition5:57
+-- commit made on master branch
+124. State as an Object9:07
 
 
 B125. Back to Redux - Index Action7:07126. Implementing Posts Reducer10:29127. Action Creator Shortcuts8:06128. Rendering a List of Posts9:19129. Creating New Posts5:42C130. A React Router Gotcha4:44
