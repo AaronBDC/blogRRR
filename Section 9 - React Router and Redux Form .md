@@ -752,6 +752,247 @@ OR do it broken out:
 -- you can do validation in multiple if statements 
 and then customize the title or the error thats shown to the user
 inside each of those different if statemnets
+--removing length validation:
+//  if(values.title.length <3){
+//    errors.title = 'Title must be at least 3 characters!';
+//  }
+
+-- condense export
+FROM:
+export default reduxForm({
+  validate: validate,
+  form: 'PostsNewForm'
+})(PostsNew);
+
+TO:
+export default reduxForm({
+  validate,
+  form: 'PostsNewForm'
+})(PostsNew);
+
+--whenevr e user presses a key, the validate function will be called
+
+--values contains allt the user input
+
+-- in order to validate these inputs, and then communicate any possible errors back to redux form,
+we have to return an object that we create from the validate function.
+
+-- this is part of redux form where he thinks that its a very simple thing but it can be a little challengeing to grasp exactly what we're doing inside the validate function right here [points to function validate(values){}])].
+
+  //console.log(values) -> {title: 'adsf', categories: 'adsf', content: 'asdf'}
+-- WHAT We're supposed to do inside this function:
+--1)  we're always going to start off by creating an errors object:
+      const errors = {} ;
+     - const errors is an empty object
+      
+  --- 2) then we'll do some logic to validate the inputs from the values object.
+  
+--- 3) at bottom, return the errors object:
+
+  return errors;
+
+-- if we return an empty object from the validate function (which is what were doing now),
+  redux-form assumes that there is absolutely nothing wrong with our form.
+    //if errors is empty, the form is fine to submit
+-- however if that object has properties what so ever, it will fail validation and not submit form at all
+  // if errors has any properties, redux form assumes form is invalid
+
+1) define the errors object
+2) inspect our values object 
+3) and if there is anything wrong with the form we append some properties to that object.
+
+--REMEMBER: FOR US, WE REALLY JUST CARE ABOUT MAKING SURE THAT A USER HAS ENTERED SOME VALID INPUT FOR EACH OF THE DIFFERENT PROPERTIES. (TITLE, CATEGORIES, AND CONTENT.)
+
+-- validate funciton will be called whenever user tries to submit the form
+-- 
+137. Showing Errors to Users4:30
+
+-- get errors displayed in our form
+
+-- it is our job to make sure these errors get displayed on the screen
+
+-- reference the field object
+
+-- reference field.meta.error:
+	{field.meta.error}
+-- this {field.meta.error} is automatically added to that field object from our validate function.
+-- the properties errors.title, errors.categories, errors.content are not picked at random
+-- these are very specific property names that i chose when we specificy a property errors.title
+and then return errors from the validate function,
+-- when redux form goes to render say this field right here it looks at the name property
+that we provided [points to <form> Fields>]
+-- it says "if the errors object has a property assigned to it of title, 
+im going to call render field right here [ppoints to component = this.renderfield]] and
+im going to  pass along whatever error message exists on that as object 
+with a power under the property title"
+-- the name title in the field is what is connected to the errors.titlte in validate
+-- if the form field's name is changed to blogtitle, no longer any communication
+from the validate function to theis particular field.
+-- the name property in <field > and the property that we use inside that validate function
+must be identical for all these errors to show up correctly.
+-- so because those two properties were identically named, the field object automaticaly gets this field.meta.error
+-- and this error.right here is going to be the exact same string that we assigned inside of the validate function which is enter a title 
+-- so if your working on your project and stuffs not showing up or stuff is not working correctly, do make sure you double check all your propetry names
 
 
-137. Showing Errors to Users4:30138. Handling Form Submittal9:30139. Form and Field States6:06E140. Conditional Styling7:06141. More on Navigation3:11142. Create Post Action Creator10:05143. Navigation Through Callbacks7:31144. The Posts Show Component3:39F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
+138. Handling Form Submittal9:30
+
+-- working on submital
+-- no button
+-- show a button inside form component
+-- add a button with a type submit and class btn btn-primary
+        <button type="submit" className="btn btn-primary">Submit</button>
+
+
+-- add onSubmit for form:
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+-- doesnt post data to backend
+-- we are still resposnbiel take data from form and do something with it
+  onSubmit(values){
+    console.log(values);
+  }
+  render(){
+    const { handleSubmit } = this.props;
+
+    return(
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+      
+-- on form submit:
+1) handleSubmit is called
+2) if everything is ok and ready to be subbmited, 
+3) it then this.onSubmit.bind(this)) is called
+
+-- we are calling bind here because we are passing this on submit as a callback function that will be executed in some different context outside of our component.
+
+-- so to make sure we have access to the same this being essentially our component inside this thing we add on the bind this.
+
+-- screenshot taken at 301 am --- all up to date -- genie local desktop
+
+-- 
+
+139. Form and Field States6:06
+
+-- move back to validation
+-- we see validation errors immediately
+-- after we key in text we see the errors disappear
+-- we dont want to show any error until they entered text and tabbed away
+-- screenshot of mockup diagram at bam at 303 am
+
+-- three different states of our form that we need to be aware of for each and every field
+that we create.
+
+-- PRISTINE = NO INPUT HAS TOUCHED IT AND THE USER HAS NOT YET SELECTED IT.
+-- TOUCHED = A USER HAS SELECTED OR FOCUSED AN INPUT AND THEN FOCUSED OUT OF THE INPUT. YOU CAN IMAGINE THE USER HAS DONE SOME WORK ON THIS FIELD AND NOW CONSIDERS IT TO BE COMPLETE
+
+-- INVALID = GOT SOME ERROR AND NEED TO SHOW IN SOME FASHION
+
+-- SHOW MESSAGE ONLY IF ENTERED THE TOUCHED STATE:
+
+--in renderField method
+-- add ternary expression to field.meta:
+
+FROM:
+        {field.meta.error}
+
+TO:
+
+        {field.meta.touched? field.meta.error: ''}
+
+--- all up to par and on track
+
+-- succes ss on 309 at genie
+E140. Conditional Styling7:06
+
+-- show up red
+-- get appropriate classnames generatting fields on text
+
+-- apply has-danger to className of form-group
+
+-- a new ternary expression when the user has touched it and an error exists
+
+-- long segment before clenaup:
+
+  const className = `form-group ${field.meta.touched && field.meta.error ? 'has-danger': ''}`;
+
+-- use destrcuring off the meta propertry:
+
+-- compacted syntax with destructoring, this does not get expanded into an object.
+
+--it is just used for destructoring to pull off the properties touched and error from the meta object.
+
+
+FROM: 
+class PostsNew extends Component{
+
+  const { meta } = field;
+  const className = `form-group ${field.meta.touched && field.meta.error ? 'has-danger': ''}`;
+  
+  renderField(field){
+    return(
+      <div className="form-group has-danger">
+        <label>{field.label}</label>
+        <input
+          className="form-control"
+          type="text"
+          {...field.input}
+        />
+        <div className="text-help">
+          {field.meta.touched? field.meta.error : ''}
+        </div>
+
+      </div>
+    );
+    
+
+FROM:
+
+  const { meta } = field;
+  const className = `form-group ${meta.touched && meta.error ? 'has-danger': ''}`;
+
+TO:
+    const { meta: {touched, error} } = field;
+    const className = `form-group ${touched && error ? 'has-danger': ''}`;
+    return(
+      <div className={className}>
+        <label>{field.label}</label>
+        <input
+          className="form-control"
+          type="text"
+          {...field.input}
+        />
+        <div className="text-help">
+          {touched? error : ''}
+        </div>
+
+      </div>
+    );
+
+-- browser testing -- save & refresh in browser
+
+-- test #1 
+- when everything first renders I expect to see absolutely no error messages. 
+- Status = PASS
+--screenshot at -548 genie.local desktop
+
+-- test #2
+- now if i select or focus an input and I put in no text and focus to another one the entire thing turns red - 
+- status = PASS
+screenshot at -548 genie.local desktop
+
+
+--test #3 
+-- but if i go back into that input and enter in some text everything goes back to saying OK that looks like valid input 
+- status = PASS
+screenshot at 549/550 on genie.local 
+
+-- you also notice that now, now that the user has kind of been messing around with this input a little bit they've put some text in here, 
+now they will instantaneously get input or feedback the instant they start changing this thing around. 
+-- so in practice, form renders pristine, everybody's happy.
+-- but as soon as you start messing around with it,
+OK we're going to start being pretty aggressive in showing you some validation messages.
+
+-- next to make our submit button at the bottom actually submit this to our back end API.
+-- we also need to make sure we show a cancel button on here that the user can click to go back to our list of posts.
+141. More on Navigation3:11
+--
+142. Create Post Action Creator10:05143. Navigation Through Callbacks7:31144. The Posts Show Component3:39F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
