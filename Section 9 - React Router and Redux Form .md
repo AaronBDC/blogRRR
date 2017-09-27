@@ -722,6 +722,36 @@ we dont have to wire these events up manually:
 --submit form
 
 --validate input
+-- to do validation of forms managed by redux form:
+-- define this object :
+  const errors = {} ;
+  -- we inspect our values object
+  
+-- then if there is anything wrong wth the form 
+
+-- we append some propeties
+--- basically put an if statement then add some title to errors and redux form wont submit it
+-- can combine like so:
+
+  //validate the inputs from values
+  if(!values.title || values.title.length <3){
+    errors.title = "Enter a title!";
+  }
+  
+OR do it broken out:
+
+  //validate the inputs from values
+  if(values.title.length <3){
+    errors.title = 'Title must be at least 3 characters!';
+  }
+  if(!values.title){
+    errors.title = 'Enter a title!';
+  }
+  
+-- you dont have to do validation in a single if statement
+-- you can do validation in multiple if statements 
+and then customize the title or the error thats shown to the user
+inside each of those different if statemnets
 
 
 137. Showing Errors to Users4:30138. Handling Form Submittal9:30139. Form and Field States6:06E140. Conditional Styling7:06141. More on Navigation3:11142. Create Post Action Creator10:05143. Navigation Through Callbacks7:31144. The Posts Show Component3:39F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00

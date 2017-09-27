@@ -11,13 +11,18 @@ class PostsNew extends Component{
           type="text"
           {...field.input}
         />
+        {field.meta.error}
       </div>
     );
   }
-
+  onSubmit(values){
+    console.log(values);
+  }
   render(){
+    const { handleSubmit } = this.props;
+
     return(
-      <form>
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
           label="Title For Post"
           name="title"
@@ -37,7 +42,30 @@ class PostsNew extends Component{
     );
   }
 }
+function validate(values){
+  //console.log(values) -> {title: 'adsf', categories: 'adsf', content: 'asdf'}
+  const errors = {};
+
+  //validate the inputs from values
+  if(values.title.length <3){
+    errors.title = 'Title must be at least 3 characters!';
+  }
+  if(!values.title){
+    errors.title = 'Enter a title!';
+  }
+  if(!values.categories){
+    errors.categories = 'Enter some categories!';
+  }
+  if(!values.content){
+    errors.content = 'Enter some content~~!';
+  }
+  //if errors is empty, the form is fine to submit
+  // if errors has any properties, redux form assumes form is invalid
+
+  return errors;
+}
 
 export default reduxForm({
+  validate,
   form: 'PostsNewForm'
 })(PostsNew);
