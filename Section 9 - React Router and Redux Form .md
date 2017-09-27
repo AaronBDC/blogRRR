@@ -1369,4 +1369,150 @@ TO:
 -- screenshot taken at genie local desktop 802 am
 
 
-F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
+F145. Receiving New Posts9:26
+
+-- one concept underlying of the creation of new posts
+-- it all comes down to how we load our data inside of our application really quick
+-- mockup screenshot from bam taken at 805 am
+-- screenshot shows redux flow
+
+-- two types of flow
+
+-- user visits postindex first -> action creators create postss state withe posts 1 2 and 3.
+
+--user visits postsshow first -> action creators create posts state with just post 2
+-- so if a user goes directly to the postshow component we want to only fetch the data that is required.
+-- but if a user lands on our application by going to the postsindex page we watch to fetch everything thats available.
+
+-- its really important to keep in mind that a user can enter into your application on pretty much absolutely any page they want by either bookmarking the page or maybe they open up a new tab or maybe they share a link with a friend.
+
+-- you always have to assume that a user might be entering to any given page inside of your application.
+
+-- what hes trying to say is the postsshow component really needs to be responsible for fetching its own data.
+-- we cannot assume that the user first went to the posts index page and fetched the big lists of posts and then navigated it over to post 
+-- so we have to always assume that the user or 
+we need to fetch fresh data for the user whenever the user comes to this component 
+
+-- start off new component by putting together an action creator to go and fetch a very particular post 
+
+-- inside of posts show component 
+
+-- goal is to first create an action creator to create a new post
+
+-- define new action creator:
+  export function fetchPost(id){
+  
+  }
+
+-- form up axios.get api request to get data
+
+-- this is the type of route we want to end up with (per the api):
+  http://reduxblog.herokuapp.com/api/posts/5
+
+-- fetch_post action creeator:
+
+export function fetchPost(id){
+  const request = axios.get(`${ROOT_URL}/posts/${id}${API_KEY}`);
+  return{
+    type: FETCH_POST,
+    payload: request
+  };
+}
+
+--update the export const for the action creators :
+
+export const FETCH_POSTS = 'fetch_posts';
+export const FETCH_POST = 'fetch_post';
+export const CREATE_POSTS = 'create_posts';
+
+
+-- go back to reducer and add in a case to catch this new type and add it to our application level state
+
+-- update import to actions in reducer_posts:
+FROM: 
+
+import { FETCH_POSTS } from '../actions';
+
+
+TO:
+
+import { FETCH_POSTS, FETCH_POST } from '../actions';
+
+-- add an additonal case:
+
+FROM:
+
+export default function(state = {}, action){
+  switch(action.type){
+    case FETCH_POSTS:
+      return _.mapKeys(action.payload.data, 'id');
+    default:
+      return state;
+  }
+}
+
+
+TO:
+
+import _ from 'lodash';
+import { FETCH_POSTS, FETCH_POST } from '../actions';
+
+export default function(state = {}, action){
+  switch(action.type){
+    case FETCH_POST:
+      const post = action.payload.data;
+      const newState = { ...state };
+      newState[post.id] = post;
+      return newState;
+    case FETCH_POSTS:
+      return _.mapKeys(action.payload.data, 'id');
+    default:
+      return state;
+  }
+}
+
+COMMENT OUT BEFORE (ES6)
+
+      // const post = action.payload.data;
+      // const newState = { ...state };
+      // newState[post.id] = post;
+      // return newState;
+      
+
+TO (IN ES6 identitcal)
+
+      return {...state, [action.payload.data.id]: action.payload.data};
+
+FULL:
+
+import _ from 'lodash';
+import { FETCH_POSTS, FETCH_POST } from '../actions';
+
+export default function(state = {}, action){
+  switch(action.type){
+    case FETCH_POST:
+      return {...state, [action.payload.data.id]: action.payload.data};
+    case FETCH_POSTS:
+      return _.mapKeys(action.payload.data, 'id');
+    default:
+      return state;
+  }
+}
+
+-- same exact thing as what we're doing in these four lines of code we commented out.
+
+-- REMEMBER: WHEN USING SQUARE BRACES/BRACKETS HERE, THIS IS NOT AN ARRAY. THIS IS IS NOT AN ARRAY HERE:
+      return {...state, [action.payload.data.id]: action.payload.data};
+
+-- WE ARE USING KEY INTERPOLATION
+-- SO WE'RE SAYING WHATEVER THE VARIABLE ACTION PAYLOAD.DATA.ID IS, MAKE A NEW KEY ON THIS OBJECT USING THIS VALUE RIGHT HERE [POINTS TO ACTION.PAYLOAD.DATA.ID] AND SET ITS VALUE EQUAL TO ACTION.PAYLOAD.DATA [POINTS TO OTHER SIDE OF COLON FOR RETURN STATEMENT ].
+
+            return {...state, [action.payload.data.id]: action.payload.data};
+
+-- So over time as a user starts to fetch more show routes inside of our application, we'll fetch each of these additional posts and we'll add them into the overall state object right here. points to
+            return {...state, [action.payload.data.id]: action.payload.data};
+
+-- so in this section we put together our fetch post action creator and we also added a bit of logic to our reducer to meld that new post into our application level state.
+
+-- next is to make sure the posts show component will actually call that action creator.
+146. Selecting from OwnProps11:27--147. Data Dependencies5:32--148. Caching Records6:13--149. Deleting a Post9:25--G150. Wrapup9:10--151. Rallycoding0:00--
