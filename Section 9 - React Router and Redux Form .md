@@ -507,6 +507,100 @@ screenshots taken at 953 at genie local
 -- I cant see the posts rendered but I can see them logged in the console
 -- screenshot of failure at 958 on genie local deskotp
 
+-- Warning: Failed propType: Invalid prop `component` of type `object` supplied to `Route`, expected `function`.
+warning @ bundle.js:2315
+checkPropTypes @ bundle.js:19554
+validatePropTypes @ bundle.js:19573
+createElement @ bundle.js:19607
+(anonymous) @ bundle.js:102
+__webpack_require__ @ bundle.js:20
+(anonymous) @ bundle.js:47
+__webpack_require__ @ bundle.js:20
+(anonymous) @ bundle.js:40
+(anonymous) @ bundle.js:43
+
+--bundle.js:51217 Uncaught (in promise) ReferenceError: post is not defined
+    at bundle.js:51217
+    at bundle.js:39521
+    at bundle.js:40319
+    at baseForOwn (bundle.js:39292)
+    at bundle.js:40289
+    at baseMap (bundle.js:39520)
+    at Function.map (bundle.js:43956)
+    at PostsIndex.renderPosts (bundle.js:51214)
+    at PostsIndex.render (bundle.js:51246)
+    at ReactCompositeComponentWrapper._renderValidatedComponentWithoutOwnerOrContext (bundle.js:7798)
+(anonymous) @ bundle.js:51217
+(anonymous) @ bundle.js:39521
+(anonymous) @ bundle.js:40319
+baseForOwn @ bundle.js:39292
+(anonymous) @ bundle.js:40289
+baseMap @ bundle.js:39520
+map @ bundle.js:43956
+renderPosts @ bundle.js:51214
+render @ bundle.js:51246
+_renderValidatedComponentWithoutOwnerOrContext @ bundle.js:7798
+_renderValidatedComponent @ bundle.js:7818
+ReactCompositeComponent__renderValidatedComponent @ bundle.js:1549
+_updateRenderedComponent @ bundle.js:7771
+_performComponentUpdate @ bundle.js:7755
+updateComponent @ bundle.js:7684
+ReactCompositeComponent_updateComponent @ bundle.js:1549
+receiveComponent @ bundle.js:7616
+receiveComponent @ bundle.js:5791
+_updateRenderedComponent @ bundle.js:7773
+_performComponentUpdate @ bundle.js:7755
+updateComponent @ bundle.js:7684
+ReactCompositeComponent_updateComponent @ bundle.js:1549
+performUpdateIfNecessary @ bundle.js:7632
+performUpdateIfNecessary @ bundle.js:5806
+runBatchedUpdates @ bundle.js:6388
+perform @ bundle.js:6848
+perform @ bundle.js:6848
+perform @ bundle.js:6345
+flushBatchedUpdates @ bundle.js:6406
+ReactUpdates_flushBatchedUpdates @ bundle.js:1549
+closeAll @ bundle.js:6914
+perform @ bundle.js:6861
+batchedUpdates @ bundle.js:10885
+enqueueUpdate @ bundle.js:6435
+enqueueUpdate @ bundle.js:6020
+enqueueSetState @ bundle.js:6186
+ReactComponent.setState @ bundle.js:16043
+handleChange @ bundle.js:20171
+dispatch @ bundle.js:20546
+(anonymous) @ bundle.js:26105
+dispatch @ bundle.js:21280
+action.payload.then._extends.payload @ bundle.js:26102
+Promise resolved (async)
+(anonymous) @ bundle.js:26101
+(anonymous) @ bundle.js:21186
+componentDidMount @ bundle.js:51209
+notifyAll @ bundle.js:6553
+close @ bundle.js:16311
+closeAll @ bundle.js:6914
+perform @ bundle.js:6861
+batchedMountComponentIntoNode @ bundle.js:2761
+perform @ bundle.js:6848
+batchedUpdates @ bundle.js:10885
+batchedUpdates @ bundle.js:6353
+_renderNewRootComponent @ bundle.js:2955
+ReactMount__renderNewRootComponent @ bundle.js:1549
+_renderSubtreeIntoContainer @ bundle.js:3029
+render @ bundle.js:3049
+React_render @ bundle.js:1549
+(anonymous) @ bundle.js:90
+__webpack_require__ @ bundle.js:20
+(anonymous) @ bundle.js:47
+__webpack_require__ @ bundle.js:20
+(anonymous) @ bundle.js:40
+(anonymous) @ bundle.js:43
+
+--util.js:228 Google Maps API warning: NoApiKeys https://developers.google.com/maps/documentation/javascript/error-messages#no-api-keys
+
+-- update from posts_index: removed posts from line 12 to post
+-- Thank you Daniel!
+
 C130. A React Router Gotcha4:44
 
 131. Navigation with the Link Component5:58132. Redux Form5:33
