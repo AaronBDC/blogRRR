@@ -2156,6 +2156,7 @@ FROM:
   export const CREATE_POSTS = 'create_posts';TO:
 
   export const CREATE_POST = 'create_post';-- SUCCESS screenshot at 120pm at genie desktop local
+-- updated to remove google map api calls
 -=--==-=
 
 code Rally:
