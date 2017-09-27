@@ -1238,5 +1238,135 @@ export function createPost(values, callback){
 
 144. The Posts Show Component3:39
 
--- 
-F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
+-- find post with id 5
+
+-- scaffolding for new compnent
+
+--posts_show.js
+
+--import react
+
+-- extend compnent
+
+-- render
+
+--return a div of posts show
+
+-- export default postsshow
+
+import React, { Component } from 'react';
+
+class PostsShow extends React.Component {
+  render(){
+    return(
+      <div>
+        Posts Show!
+      </div>
+    );
+  };
+}
+export default PostsShow;
+
+-- QUESTION #1: When do you know when to end a code "block" with a semicolon? When to use after a (); and when to use after a {}; ?
+
+- QUESTION #2:Does it matter when you render return with curly braces or parenthesis? Does it matter when you render(){return(<div>Posts Show! </div>) vs render(){return{<div> Posts Show! </div>}}}
+In the render's return, what is the difference when you use parenthesis:
+
+class PostsShow extends React.Component {
+render(){return(<div> Posts Show! </div>)} 
+
+versus when you use curly braces:
+
+class PostsShow extends React.Component {
+render(){return{<div> Posts Show! </div>}}
+
+​question #3 PostShow extends React.Component vs PostsShow extends Component:
+When creating a new component, is it ever useful to extends React.Component{} instead of extends Component?
+
+Will there be that much of a file size reduction and performance boost if I always used extends Component?
+
+Is it just for the purpose of code golf to use extends Component?
+
+Which is better?
+
+Is this stronger typing ever useful?
+
+If so, could you give an example of when using 
+
+extends React.Component 
+
+ is better than using 
+
+extends Component 
+
+Thank you for your time and attention!
+
+-- add this to a new route component
+
+--import the component we just created in the index.js of trhe src root:
+   import PostsShow from './components/posts_show';
+
+-- add in an additional route in the <switch> block
+
+-- REMEMBER: THE ORDER IN WHICH WE DEFINE OUR ROUTES MAKES A BIG DIFFERENCE IN THE REACTDOM.RENDER(PROVIDER>BROWSERROUTER>DIV>SWITCH> ROUTE)
+-- IF WE DEFINE ROUTES IN AN INCORRECT ORDER WE MIGHT MATCH AN INCORRECT ROUTE AND WELL GET THE INCORRECT COMPONENT TO APPEAR ON THE SCREEN.
+
+-- So in this case, we want to make sure that we add this new route between the two existing ones:
+
+          <Route path="/posts/new" component={PostsNew} />
+                    H E R E
+          <Route path="/" component={PostsIndex} />
+          
+
+
+FROM:
+
+  <Provider store={createStoreWithMiddleware(reducers)}>
+
+    <BrowserRouter>
+      <div>
+        <Switch>
+          <Route path="/posts/new" component={PostsNew} />
+          <Route path="/" component={PostsIndex} />
+        </Switch>
+      </div>
+
+    </BrowserRouter>
+  </Provider>
+
+TO:
+  <Provider store={createStoreWithMiddleware(reducers)}>
+
+    <BrowserRouter>
+      <div>
+        <Switch>
+          <Route path="/posts/new" component={PostsNew} />
+          <Route path="/posts/:id" component={PostsShow} />
+          <Route path="/" component={PostsIndex} />
+        </Switch>
+      </div>
+
+    </BrowserRouter>
+  </Provider>
+  
+-- REMEMBER: THAT THE COLON ID RIGHT HERE IS A WILD CARD OF SORTS. SO REACT ROUTER IS GOING TO TRY TO TAKE WHATEVER IS IN THAT LITTLE POSITION URL AND PASS IT AS AS PROPERTY OR A PROP TO OUR POST SHOW COMPONENT.
+
+-- We wanted to make sure that this was specifically the second route inside of our application because if it were the first one, if the user tried to navigate to posts/new, /new would be taken as the wildcard token. 
+-- and so this route would match PostsNew if it was first
+-- so thats why we wanted to make sure that it is the second one inside of our application.
+
+-- save file and refresh browser to test
+
+-- navigate to posts manually posts/123:
+  localhost:8080/posts/123
+
+-- succes screenshot taken at 801 at genie local desktop
+--we correctly see posts show ont he screen and if we go to /new we still see the new form on the screen. 
+
+
+  localhost:8080/posts/new
+
+-- screenshot taken at genie local desktop 802 am
+
+
+F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
