@@ -603,5 +603,59 @@ __webpack_require__ @ bundle.js:20
 
 C130. A React Router Gotcha4:44
 
-131. Navigation with the Link Component5:58132. Redux Form5:33
+-- supposed to be seeing both components rendered on the screen
+-- import the switch component from react-router-dom
+
+-- the switch component only renders
+-- the switch needs the most detailed route first
+
+ReactDOM.render(
+  <Provider store={createStoreWithMiddleware(reducers)}>
+
+    <BrowserRouter>
+      <div>
+        <Switch>
+          <Route path="/posts/new" component={PostsNew} />
+          <Route path="/" component={PostsIndex} />
+
+        </Switch>
+      </div>
+
+    </BrowserRouter>
+  </Provider>
+  , document.querySelector('.container'));
+
+
+-- 
+
+
+131. Navigation with the Link Component5:58
+
+-- add navigation between index and new
+
+-- open post_index file inside the components directory
+
+-- navigation on classic html documents use anchor tag
+
+--in react-router, we dont use anchor tags anymore
+
+-- we really want to show a new set of componnets
+
+-- we do not want another fetch
+
+-- import Link from react-router dom is very much like anchor tag for links
+
+          <Link className="btn btn-primary" to="/posts/new">
+            Add a post
+          </Link>
+-- insetad of href we use to property
+-- whats the difference between link and anchor
+-- link has a few events on the link 
+
+132. Redux Form5:33
+-- acts like an alias for reducer throughout app:
+    import {reducer as formReducer } from 'reedux-form'
+-- anywhere else in the file we will refer to formReducer and not reducer from redux-form
+
+
 133. Setting Up Redux Form9:27134. The Field Component10:49D135. Generalizing Fields8:54136. Validating Forms10:31137. Showing Errors to Users4:30138. Handling Form Submittal9:30139. Form and Field States6:06E140. Conditional Styling7:06141. More on Navigation3:11142. Create Post Action Creator10:05143. Navigation Through Callbacks7:31144. The Posts Show Component3:39F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-class PostNew extends Component{
+class PostsNew extends Component{
   render(){
     return(
       <div>
-        
+        PostsNew!
       </div>
     )
   }
 }
+
+export default PostsNew;
