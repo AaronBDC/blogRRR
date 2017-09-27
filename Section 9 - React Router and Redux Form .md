@@ -703,4 +703,25 @@ we dont have to wire these events up manually:
 
 -- make sure input shows itself as a text type input
 
-D135. Generalizing Fields8:54136. Validating Forms10:31137. Showing Errors to Users4:30138. Handling Form Submittal9:30139. Form and Field States6:06E140. Conditional Styling7:06141. More on Navigation3:11142. Create Post Action Creator10:05143. Navigation Through Callbacks7:31144. The Posts Show Component3:39F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
+D135. Generalizing Fields8:54
+
+-- screenshot at 1113 on genie local deskotop
+
+-- instead of renderTagsField and renderTitleField, mash into one
+
+-- success screenshot taken at genie at 1120
+
+-- all on track and on target
+
+
+
+136. Validating Forms10:31
+
+** -- shouldnt have used tags but categories instead
+
+--submit form
+
+--validate input
+
+
+137. Showing Errors to Users4:30138. Handling Form Submittal9:30139. Form and Field States6:06E140. Conditional Styling7:06141. More on Navigation3:11142. Create Post Action Creator10:05143. Navigation Through Callbacks7:31144. The Posts Show Component3:39F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
