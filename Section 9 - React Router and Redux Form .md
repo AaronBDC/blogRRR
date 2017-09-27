@@ -367,7 +367,53 @@ and we can say "hey find the post with tthe id 5 out of this list and show it on
 -- action creator to fetch a list of posts
 -- and somehow turn the array of posts that we get back from our API into this object that contain the posts as well.
 
-126. Implementing Posts Reducer10:29127. Action Creator Shortcuts8:06128. Rendering a List of Posts9:19129. Creating New Posts5:42C130. A React Router Gotcha4:44
+-- install axios and redux promise
+
+-- rewire redux promise as a middleware
+
+-- import promise ]redux promise
+
+-- pass into applymiddleware call
+
+-- import axios library into src actions index.
+
+-- I UPDATED INDEX.JS IN SRC/ACTIONS TO REFLECT A BETTER ROOT_URL
+FROM :
+  const ROOT_URL = 'http://reduxblog/herokuapp.com/api';
+
+TO: 
+  const ROOT_URL = 'http://reduxblog/herokuapp.com/api/posts';
+TO:
+  const ROOT_URL = 'http://reduxblog.herokuapp.com/api';
+
+-- UDPDATED API_KEY
+ const API_KEY = '?key=DASRIDERCLIP1234';
+
+
+-- FORMED REQUEST:
+  const request = axios.get(`${ROOT_URL}/posts${API_KEY}`);
+
+-- ADD IT TO THE PAYLOAD OF THE ACTION WE'RE RETURNING:
+
+  ///action object
+  return{
+    type: FETCH_POSTS,
+    payload: request
+  };
+
+-- WE'RE MAKING THE AXIOS GET REQUEST,
+THEN WE'RE ASSIGNING THE REQUEST TO THAT PAYLOAD PROPERTY OF THE ACTION 
+THAT WE'RE RETURNING.
+-- BECAUSE THE REQUEST IS BEING ASSIGNED TO THE PAYLOAD PROPERTY, THE REDUX PROMISE MIDDLEWARE THAT WE MADE USE OF WILL AUTOMATICALLY RESOLVE THIS REQUEST
+FOR US WHENEVER IT SEES THIS ACTION COME ACROSS.
+-- SO BY THE TIME THIS ACTION ARRIVES IN THE REDUCER, THE PAYLOAD PROPERTY WILL
+CONTAIN THE RESPONSE OBJECT FROM AXIOS 
+WHICH WILL HAVE OUR BIG OLD ARRAY OF POSTS.
+
+
+126. Implementing Posts Reducer10:29
+
+127. Action Creator Shortcuts8:06128. Rendering a List of Posts9:19129. Creating New Posts5:42C130. A React Router Gotcha4:44
 
 131. Navigation with the Link Component5:58132. Redux Form5:33
 133. Setting Up Redux Form9:27134. The Field Component10:49D135. Generalizing Fields8:54136. Validating Forms10:31137. Showing Errors to Users4:30138. Handling Form Submittal9:30139. Form and Field States6:06E140. Conditional Styling7:06141. More on Navigation3:11142. Create Post Action Creator10:05143. Navigation Through Callbacks7:31144. The Posts Show Component3:39F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
