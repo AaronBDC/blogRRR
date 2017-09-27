@@ -994,5 +994,249 @@ OK we're going to start being pretty aggressive in showing you some validation m
 -- next to make our submit button at the bottom actually submit this to our back end API.
 -- we also need to make sure we show a cancel button on here that the user can click to go back to our list of posts.
 141. More on Navigation3:11
---
-142. Create Post Action Creator10:05143. Navigation Through Callbacks7:31144. The Posts Show Component3:39F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
+-- ALL up to PAR and on TRACK
+
+-- submit button gets wired up to action creator to create our posts
+-- we also need a button to cancel the creation of a new post as well.
+
+-- use the Link tag for navigating components
+
+-- import link tag to posts_new.js
+  import { Link } from 'react-router-dom';
+
+ -- place Link tag inside of render function of posts_new.js:
+   <Link to="/" className="btn btn-danger" >Cancel</Link>
+
+-- test #4--
+-- will cancel button work in browser
+-- succes screenshot at genie.local desktop at 601 am
+
+-- add space between these two buttons by adding margin-left:
+  form a {
+    margin-left: 5px;
+  }
+-- succes screenshot added 604 genie local desktop
+
+142. Create Post Action Creator10:05
+
+-- saving data via onSubmit Aciton Creator
+-- creating action creator
+
+FROM:
+export default reduxForm({
+  validate,
+  form: 'PostsNewForm'
+})(PostsNew);
+
+
+TO: 
+export default reduxForm({
+  validate,
+  form: 'PostsNewForm'
+})(
+  connect(null, { createPost }) (PostsNew)
+);
+
+-- test#5
+-- post creates XHR request and uses requst method OPTIONS which means localhost to external for CORS
+
+-- CORS is a security feature that is present inside your user's browser to present or prevent malicious type code from making requests to other domains.
+
+-- screenshot taken at genie at 613 desktop
+
+-- what we really care about itis the 2nd request which is the post request.
+
+-- screenshot taken at 614 am on genie.local desktop
+
+-- looks like we got back a status code of 201 created 
+
+-- and if i click on the preview tab i see my category is content title and most importantly I have an ID as well.
+
+-- success screenshot at genie.local desktop 616 am
+
+--it looks like the post was successfully created!!
+-- if we go back to the index page now the instant we go back to the index page, the index page will refetch our list of posts and we can now see the new post appear on the screen.
+
+-- success screenshot at 617 (pressed submit twice --thats why theres two my posts)
+
+-- looks like everything is working except this akward piece of flow
+
+-- after submit, we want our user gets redirected automatically back to our list of posts.
+-- screnshot taken at 619
+
+-- so we need to somehow make sure that once the post has been created we actually navigate the user somewhere else.
+
+-- all on track and on PAR.
+143. Navigation Through Callbacks7:31
+-- user mockup screenshot taken at bam at 621 -- shows flow affter user submits form
+
+-- notice we wait and only after success, we navigate the user to the post list
+
+-- this is called progammatic navigation 
+-- we want to automatically navigate the user around our application the link tag is not for progammatic navigation.
+-- the link tag is navigation that responds to a user clicking on something.
+-- to handle progammatic, react-router passes in a big set of props on or into our component that is being read rendered by our route.
+-- hey go back to our route:
+        this.props.history.push('/');
+-- only go back AFTER the post has been created:
+    onSubmit(values){
+      this.props.history.push('/');
+      this.props.createPost(values);
+   }
+--  test# 6 - retest in browser to see if it goes back automatically
+
+-- youll notice that because we navigated back to the index route before the post was created we entered into kind of a race condition where essentially that post is being created at the exact same time that we're fetching our list of posts.
+-- so its a 50/50 chance as to whether or not our newly created post will actually show up on this list.
+
+-- success screenshot at genie local desktop 629 am
+
+-- screenshot shows post444 in XHR console but not list until refresh
+
+-- success screenshot at 6:30 am on genie local desktop
+
+-- screenshot shows post 444 on LIST and not in XHR console
+
+-- we really have to wait here for the post to be created before we attempt to navigate back here.
+
+-- we navigated too soon.
+
+FROM: 
+
+  onSubmit(values){
+    this.props.history.push('/');
+    this.props.createPost(values);
+  }
+  
+TO:
+
+  onSubmit(values){
+    this.props.createPost(values, ()=> {
+      this.props.history.push('/');
+    });
+  }
+
+-- @COMEBACK AND UPDATE 
+-- so the second argument im going to pass in a callback function and then im going to move the history.push call inside of that
+
+-- so now our action creator has this function right here:
+
+  onSubmit(values){
+    this.props.createPost(values, ()=> {
+      this.props.history.push('/');
+    });
+  }
+
+-- if the action creator calls this function it will automatically navigate us back to our list of posts.
+
+-- so now lets change over to our action creator file side of actions index and we'll go down to create posts right here [points to src/actions/index.js's createPost]
+FROM:
+
+export function createPost(values){
+  const request = axios.post(`${ROOT_URL}/posts${API_KEY}`, values);
+
+  return{
+    type: CREATE_POSTS,
+    payload: request
+  }
+}
+
+TO:
+
+export function createPost(values, callback){
+  const request = axios.post(`${ROOT_URL}/posts${API_KEY}`, values);
+
+  return{
+    type: CREATE_POSTS,
+    payload: request
+  }
+}
+
+-- lets start off by 
+
+-- so this is our callback function and now we want to make sure that only after this request right here has succeded, only after we have received this request or yo know only after the post has been created, do we want to call the callback manually to do so we can use a promise because that is what is returned by axios.post 
+
+ [points to axios.post(`${ROOT_URL}/posts${API_KEY}`]
+
+-- youre going to take the semi colon off the end and then on a new line we'll say:
+FROM:
+    const request = axios.post(`${ROOT_URL}/posts${API_KEY}`, values);
+
+TO:
+
+  const request = axios.post(`${ROOT_URL}/posts${API_KEY}`, values)
+  .then(()=> callback());
+  
+-- then and inside of your we'll call the call back in practice:
+--make the API request 
+--after has been successfully completed
+-- execute this function 
+-- and all this function does is call the callback that we just passed in.
+
+-- refresh in browser 
+
+-- retest --- make post 5
+-- ERROR no navigation --
+
+screenshot taken before 645 on genie.local
+
+Problem:
+--noticed line 25 of index.js in actions had type: CREATE_POSTS instead of CREATE_POST
+FROM:
+
+
+  return{
+    type: CREATE_POSTS,
+    payload: request
+  }
+  
+TO:
+
+
+  return{
+    type: CREATE_POST,
+    payload: request
+  }
+
+-- still no navigation
+
+-- order of operations SHOULD be at button click submit:
+
+-- we get the response back 
+-- and then we navigate to our list of posts so submit and there we go.
+
+-- noticed an error at index.js of action creators. no callback passed to createPost.
+
+FROM:
+
+export function createPost(values){
+  const request = axios.post(`${ROOT_URL}/posts${API_KEY}`, values)
+  .then(()=> callback());
+
+  return{
+    type: CREATE_POST,
+    payload: request
+  }
+}
+
+
+TO:
+
+export function createPost(values, callback){
+  const request = axios.post(`${ROOT_URL}/posts${API_KEY}`, values)
+  .then(()=> callback());
+
+  return{
+    type: CREATE_POST,
+    payload: request
+  }
+}
+
+-- SUCCES SCRENSHOT TAKEN At 651 -- 
+
+--all on track and on PAR
+
+
+144. The Posts Show Component3:39
+
+-- 
+F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
