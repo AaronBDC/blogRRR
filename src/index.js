@@ -11,24 +11,13 @@ import PostsIndex from './components/posts_index';
 import PostsNew from './components/posts_new';
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
-class Hello extends React.Component{
-  render(){ return <div>Hello!</div>}
-}
-class Goodbye extends React.Component {
-  render(){ return <div>Goodbye</div>}
-}
+
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
 
     <BrowserRouter>
       <div>
-        Header
         <Switch>
-
-          <Route path="/hello" component={Hello} />
-          <Route path="/goodbye" component={Goodbye} />
-
-
           <Route path="/posts/new" component={PostsNew} />
           <Route path="/" component={PostsIndex} />
         </Switch>

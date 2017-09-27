@@ -299,10 +299,75 @@ Component: PostsNew
 
 123. Our First Route Definition5:57
 -- commit made on master branch
+
+-- new posts_index component
+
+-- noticed existing app component
+
+-- from index.js in src. remove hello and goodbye test components.
+
+-- from index.js in src. remove the routes in the render method for the header text, hello and goodbye routes
+
+-- now that we have react router, we dont need app component
+
+-- delete import statement and the appjs component file
+
+-- import PostIndex from compnents/posts_)index
+import PostsIndex from './components/posts_index';
+
+-- associate posts_index compnent to route root path /
+          <Route path="/" component={PostsIndex} />
+
+-- REMEMBER: THE WAY I"M LEARNING THIS INTRODUCES A BUG WITH REACT ROUTER @COMEBACK EXPLAIN
+-- the bug is left in because he gaurantees we will run into it ourselves in production for our own projects when we use react router for the first time.
+-- its a very common mistake that everyone runs into when first using react-router
+-- we will fix it (hint its one word we add to this prop in index?)
+-- test in browser
+
+-- 
 124. State as an Object9:07
 
+-- move over to redux side of things for wiring it up
+-- different design for state object this time.
+-- look at api for posts
+-- we get array of posts, 
+-- each post has an id
+-- how we are different for structure
+-- interaction between react router and redux
+-- stuff gets crazy here
+-- app state and url 
+-- url is a critical piece of state.
+-- whenever state changes, we rerender
+-- current route is a piece of state inside of our
+-- id for that route is really provided by actvePost key
+-- we dont need activePost state so we get rid of it because dont need it inisde the URL
 
-B125. Back to Redux - Index Action7:07126. Implementing Posts Reducer10:29127. Action Creator Shortcuts8:06128. Rendering a List of Posts9:19129. Creating New Posts5:42C130. A React Router Gotcha4:44
+-- so in other words whenever we render the post show component,
+we can look at the URL,
+we can look at our list of posts,
+and we can say "hey find the post with tthe id 5 out of this list and show it on the screen to the user"
+
+-- thats step 1 in changing our state structure here.
+-- step 1 is to understand why we really dont need that active post piece of state.
+-- thats reasonable because the URL does reflect the ID so we really dont need this exrtra extra piece of state in here because we can manually calculate it by looking at our posts list and the URL the a user is looking at at any given time.
+-- screenshot takein around 0804 at bam
+
+-- next change - use object instead of array
+--if we used an array we'd have to use a find or a loop for the array to find the post
+-- going from posts in array to posts in object makes it a little bit eaiser to use and involves less code:
+  state.posts[postId]
+-- the postId above is assuming we pulled the URL and made it into the postId variable
+-- the idea is called an object for holding properties or records inside of redux is a very advanced concept.
+-- so this really is a challenging refactor right here that im suggesting but I got to tell you this is how we really do it in production.
+-- this is how we really build large applications that scale well.
+-- it is a little bit painful refactor as we go through this but you know its definitely something we have to do out of neccessitty.
+
+ B125. Back to Redux - Index Action7:07
+
+-- action creator to fetch a list of posts
+-- and somehow turn the array of posts that we get back from our API into this object that contain the posts as well.
+
+126. Implementing Posts Reducer10:29127. Action Creator Shortcuts8:06128. Rendering a List of Posts9:19129. Creating New Posts5:42C130. A React Router Gotcha4:44
 
 131. Navigation with the Link Component5:58132. Redux Form5:33
 133. Setting Up Redux Form9:27134. The Field Component10:49D135. Generalizing Fields8:54136. Validating Forms10:31137. Showing Errors to Users4:30138. Handling Form Submittal9:30139. Form and Field States6:06E140. Conditional Styling7:06141. More on Navigation3:11142. Create Post Action Creator10:05143. Navigation Through Callbacks7:31144. The Posts Show Component3:39F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
