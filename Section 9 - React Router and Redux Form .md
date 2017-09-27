@@ -657,5 +657,50 @@ ReactDOM.render(
     import {reducer as formReducer } from 'reedux-form'
 -- anywhere else in the file we will refer to formReducer and not reducer from redux-form
 
+133. Setting Up Redux Form9:27
 
-133. Setting Up Redux Form9:27134. The Field Component10:49D135. Generalizing Fields8:54136. Validating Forms10:31137. Showing Errors to Users4:30138. Handling Form Submittal9:30139. Form and Field States6:06E140. Conditional Styling7:06141. More on Navigation3:11142. Create Post Action Creator10:05143. Navigation Through Callbacks7:31144. The Posts Show Component3:39F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
+-- screenshot on bam taken at 1056 for flow of redux form
+-- redux form handles and changes to any input
+-- those boilerplates will be handled
+
+-- pass two callbacks that validate the user input
+
+-- if valid, handle form submittale
+
+-- user is trying to submit, take data and save to backend sever or whatever.
+
+-- make one field component per each piece of state
+
+-- import field and reduxform from redux-form in posts_new..js of componets
+
+-- reduxForm is very similar to the HOC connect component of react-redux
+
+-- reduxForm allows component talk to redux store
+
+-- wire up reduxform attached to postsnew compnent at bottom
+
+-- make string in form property unique
+
+
+export default reduxForm({
+  form: 'PostsNewForm'
+})(PostsNew);
+
+
+
+
+134. The Field Component10:49
+--           {...field.input}
+-- field.input is an object that contains props and 
+
+we dont have to wire these events up manually:
+<input 
+  onChange={field.input.onChange}
+  onFocus={}
+  onBlur = {}>
+  
+-- passes through all the event handlers 
+
+-- make sure input shows itself as a text type input
+
+D135. Generalizing Fields8:54136. Validating Forms10:31137. Showing Errors to Users4:30138. Handling Form Submittal9:30139. Form and Field States6:06E140. Conditional Styling7:06141. More on Navigation3:11142. Create Post Action Creator10:05143. Navigation Through Callbacks7:31144. The Posts Show Component3:39F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
