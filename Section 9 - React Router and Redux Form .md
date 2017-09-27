@@ -2146,7 +2146,17 @@ if the state object has a key of the posts id jsut drop it
 
 151. Rallycoding0:00--
 
-RallycodingSection 9, Lecture 151Be sure to check out RallyCoding.  You'll find a lot of helpful blog posts, new courses, and all kinds of other stuff!Interested in any of my other courses?  Pick them up for just $10!React Native: Advanced Concepts - https://www.udemy.com/react-native-advanced/?couponCode=4MORE1234GraphQL With React: The Complete Developer's Guide - https://www.udemy.com/graphql-with-react-course/?couponCode=4MORE1234Webpack 2: The Complete Developer's Guide - https://www.udemy.com/webpack-2-the-complete-developers-guide/?couponCode=4MORE1234MongoDB with NodeJS - https://www.udemy.com/the-complete-developers-guide-to-mongodb/?couponCode=4MORE1234Elixir with Phoenix - https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/?couponCode=4MORE1234ES6 Javascript - https://www.udemy.com/javascript-es6-tutorial/?couponCode=4MORE1234Meteor with React for Realtime Apps - https://www.udemy.com/meteor-react-tutorial/?couponCode=4MORE1234Advanced React with Redux - https://www.udemy.com/react-redux-tutorial/?couponCode=4MORE1234Electron for Desktop Apps - https://www.udemy.com/electron-react-tutorial/?couponCode=4MORE1234-- APP DONE FINAL COMMIT-=--==-=
+RallycodingSection 9, Lecture 151Be sure to check out RallyCoding.  You'll find a lot of helpful blog posts, new courses, and all kinds of other stuff!Interested in any of my other courses?  Pick them up for just $10!React Native: Advanced Concepts - https://www.udemy.com/react-native-advanced/?couponCode=4MORE1234GraphQL With React: The Complete Developer's Guide - https://www.udemy.com/graphql-with-react-course/?couponCode=4MORE1234Webpack 2: The Complete Developer's Guide - https://www.udemy.com/webpack-2-the-complete-developers-guide/?couponCode=4MORE1234MongoDB with NodeJS - https://www.udemy.com/the-complete-developers-guide-to-mongodb/?couponCode=4MORE1234Elixir with Phoenix - https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/?couponCode=4MORE1234ES6 Javascript - https://www.udemy.com/javascript-es6-tutorial/?couponCode=4MORE1234Meteor with React for Realtime Apps - https://www.udemy.com/meteor-react-tutorial/?couponCode=4MORE1234Advanced React with Redux - https://www.udemy.com/react-redux-tutorial/?couponCode=4MORE1234Electron for Desktop Apps - https://www.udemy.com/electron-react-tutorial/?couponCode=4MORE1234-- APP DONE FINAL COMMIT-- FOUND ERROR at app:
+Uncaught ReferenceError: CREATE_POST is not defined
+-- screenshot at genie 0118 pm at genie desktop
+
+-- problem in index/actions
+
+FROM:
+  export const CREATE_POSTS = 'create_posts';TO:
+
+  export const CREATE_POST = 'create_post';-- SUCCESS screenshot at 120pm at genie desktop local
+-=--==-=
 
 code Rally:
 
