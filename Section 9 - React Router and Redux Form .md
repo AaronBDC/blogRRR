@@ -2146,4 +2146,29 @@ if the state object has a key of the posts id jsut drop it
 
 151. Rallycoding0:00--
 
-RallycodingSection 9, Lecture 151Be sure to check out RallyCoding.  You'll find a lot of helpful blog posts, new courses, and all kinds of other stuff!Interested in any of my other courses?  Pick them up for just $10!React Native: Advanced Concepts - https://www.udemy.com/react-native-advanced/?couponCode=4MORE1234GraphQL With React: The Complete Developer's Guide - https://www.udemy.com/graphql-with-react-course/?couponCode=4MORE1234Webpack 2: The Complete Developer's Guide - https://www.udemy.com/webpack-2-the-complete-developers-guide/?couponCode=4MORE1234MongoDB with NodeJS - https://www.udemy.com/the-complete-developers-guide-to-mongodb/?couponCode=4MORE1234Elixir with Phoenix - https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/?couponCode=4MORE1234ES6 Javascript - https://www.udemy.com/javascript-es6-tutorial/?couponCode=4MORE1234Meteor with React for Realtime Apps - https://www.udemy.com/meteor-react-tutorial/?couponCode=4MORE1234Advanced React with Redux - https://www.udemy.com/react-redux-tutorial/?couponCode=4MORE1234Electron for Desktop Apps - https://www.udemy.com/electron-react-tutorial/?couponCode=4MORE1234-- APP DONE FINAL COMMIT
+RallycodingSection 9, Lecture 151Be sure to check out RallyCoding.  You'll find a lot of helpful blog posts, new courses, and all kinds of other stuff!Interested in any of my other courses?  Pick them up for just $10!React Native: Advanced Concepts - https://www.udemy.com/react-native-advanced/?couponCode=4MORE1234GraphQL With React: The Complete Developer's Guide - https://www.udemy.com/graphql-with-react-course/?couponCode=4MORE1234Webpack 2: The Complete Developer's Guide - https://www.udemy.com/webpack-2-the-complete-developers-guide/?couponCode=4MORE1234MongoDB with NodeJS - https://www.udemy.com/the-complete-developers-guide-to-mongodb/?couponCode=4MORE1234Elixir with Phoenix - https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/?couponCode=4MORE1234ES6 Javascript - https://www.udemy.com/javascript-es6-tutorial/?couponCode=4MORE1234Meteor with React for Realtime Apps - https://www.udemy.com/meteor-react-tutorial/?couponCode=4MORE1234Advanced React with Redux - https://www.udemy.com/react-redux-tutorial/?couponCode=4MORE1234Electron for Desktop Apps - https://www.udemy.com/electron-react-tutorial/?couponCode=4MORE1234-- APP DONE FINAL COMMIT-=--==-=
+
+code Rally:
+
+Bonus - RallyCoding100. Basics of Redux Thunk7:16
+-- why thunk exist
+-- the purpose of thunk
+-- the purpose of redux itself is to hold our application state.
+-- mockup screenshot taken at bam at 1140 showing react + redux dispatch cycle.
+-- its a pattern that we repeat over and over in our applications.
+-- this pattern works for things that are synchronous
+-- synchronose means an action in which instantly flows into our middleware and our reducers 
+
+-- the vast majority of web applications we build however need to fetch data through asynchronous channels.
+-- in other words, its much more common that when we call an action creator we actually want to go and fetch some amount of data from some API or you know some asynchronous action and only when that request resolves are we actually ready to create an action. 
+-- vanilla redux is not set up for this type of operation right out of the box.
+-- so how do we handle these asynchronous action creators?
+-- how do we make asynchronous requests?
+-- thats where redux thunk comes into play
+-- the purpose of redux thunk is to give us direct control over the dispatch method
+
+101. Combining Redux and Firebase12:16
+
+102. Dynamic Forms with Redux Form14:42
+
+103. Logicless Components with Reselect18:08104. Data Loading Methods with Redux9:29105. Animation of React Components12:33106. Four Most Common Errors with React and Redux12:02107. Modals in React and Redux Apps18:43108. The Best Way to Store Redux Data15:05109. BrowserHistory in Production19:46110. Introducing JSPlaygrounds for Rapid Prototyping12:18111. Deployment of React/Webpack Apps23:15112. React Integration with Third Party Libraries18:42
