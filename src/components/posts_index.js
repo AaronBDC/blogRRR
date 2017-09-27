@@ -18,6 +18,7 @@ class PostsIndex extends Component {
     });
   }
   render(){
+    console.log(this.props.posts);
     return(
       <div>
         <div className="text-xs-right">
@@ -38,4 +39,4 @@ function mapStateToProps(state){
   return { posts: state.posts };
 
 }
-export default connect(null, { fetchPosts })( PostsIndex );
+export default connect(mapStateToProps, { fetchPosts })( PostsIndex );

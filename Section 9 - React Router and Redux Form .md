@@ -412,8 +412,102 @@ WHICH WILL HAVE OUR BIG OLD ARRAY OF POSTS.
 
 
 126. Implementing Posts Reducer10:29
+-- when testing this out, an empty array might come back because we are testing
+-- we dont have any post stored in the api so it will come back empty
+-- if we made this request now an empty array would come back (expected result)
+-- once we start to add in the functionality to add a new post to our API well then things are going to be a little bit more lively inside our application.
+-- lets work on the redux side of things now
+-- the reducer which is going to store or produce the post piece of state
 
-127. Action Creator Shortcuts8:06128. Rendering a List of Posts9:19129. Creating New Posts5:42C130. A React Router Gotcha4:44
+test code:
+`````
+
+start
+
+
+``
+
+const posts = [
+  { id: 4, title: "hi"},
+  { id: 25, title: "bye"},
+  { id: 36, title: "hows it going"}
+ ];
+
+const state = _.mapKeys(posts, 'id' )
+
+state["4"]
+
+
+```
+
+output
+````
+
+{"id":4,"title":"hi"}
+
+```
+
+actual code:
+
+      return _.mapKeys(action.payload.data, 'id');
+
+127. Action Creator Shortcuts8:06
+
+-- in lifecycle method, its an ideal location to kick off our data loading process..
+//lifecycle method
+    //automatically called when this component has shown up in the dom.
+    //when we call our api as soon as the component is about to be shown
+    //perfect for something one time like loading...
+    this.props.fetchPosts();
+    
+-- retest and examine network tab of dev console /inspector
+
+-- screenshot of succes stkaen at 926 at genie .local desktop
+
+ 
+128. Rendering a List of Posts9:19
+--connect mapStateToProps whenever we want to consume the data from an API
+
+ FROM:
+ 
+   export default connect(null, { fetchPosts })( PostsIndex );
+
+TO:
+  export default connect(mapStateToProps, { fetchPosts })( PostsIndex );
+
+screenshots taken at 953 at genie local
+
+-- two console logs 
+-- everything renders one time without any posts
+-- component rerenders after fetch post is populating
+
+-- notice the key of the id
+
+-- put together a helper funciton inside the 
+  render(){
+    console.log(this.props.posts);
+    return(
+      <div>
+        <div className="text-xs-right">
+          <Link className="btn btn-primary" to="/posts/new">
+            Add a post
+          </Link>
+        </div>
+        <h3> Posts </h3>
+      <ul className="list-group">
+        {this.renderPosts()}
+      </ul>
+     </div>
+    );
+  }
+  
+-- 
+
+129. Creating New Posts5:42
+-- I cant see the posts rendered but I can see them logged in the console
+-- screenshot of failure at 958 on genie local deskotp
+
+C130. A React Router Gotcha4:44
 
 131. Navigation with the Link Component5:58132. Redux Form5:33
 133. Setting Up Redux Form9:27134. The Field Component10:49D135. Generalizing Fields8:54136. Validating Forms10:31137. Showing Errors to Users4:30138. Handling Form Submittal9:30139. Form and Field States6:06E140. Conditional Styling7:06141. More on Navigation3:11142. Create Post Action Creator10:05143. Navigation Through Callbacks7:31144. The Posts Show Component3:39F145. Receiving New Posts9:26146. Selecting from OwnProps11:27147. Data Dependencies5:32148. Caching Records6:13149. Deleting a Post9:25G150. Wrapup9:10151. Rallycoding0:00
