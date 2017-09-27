@@ -2177,7 +2177,43 @@ Bonus - RallyCoding100. Basics of Redux Thunk7:16
 -- how do we make asynchronous requests?
 -- thats where redux thunk comes into play
 -- the purpose of redux thunk is to give us direct control over the dispatch method
+-- the dispatch method is a part of the redux store that contains application state
+-- screenshot of mockup taken at bam at 129pm
+--  in this cycle diagram you can really think of the dispatch method as handling everything essentially on the bottom right hand corner
+-- when we normally call an action creator and it returns an action the action ends up being passed into this dispatch method.
+-- so this is really one of those things that has been working behind the scenes all along.
+-- you have been using the dispatch method in any vanilla redux application youve already been using.
+-- weve already been making use of the dispatch
+-- you can really think of this dispatch as aa big funnel of sorts we call an action creator.
+-- screenshot taken at bam at 135 for mockup of actions getting dispatched
+-- so you can kind of imagine as being a big funnel or a pipe we throw an action into it and out comes some new state on the other side.
 
+
+-- to make use of redux thunk we must realize that the all of the existing rules for action creators kinda go out the window.
+-- vanilla redux expects us to return in action which is a plain javascript object
+-- redux thunk on the other hand enables one other return type and that is a plain javascript function.
+-- so only with redux thunk are we able to return a plain javascript function like this
+  const request = axios.get('http://jsonplaceholder.typicode.com/users');
+  return () => {
+
+  };
+}
+
+-- the first argument to the function just added is going to be the dispatch method and as areminder, the dispatch method is essentially that big funnel or that big pipe.
+
+
+--if we pass an action into dispatch its going to be sent off to all of our different reducers.
+-- im going to wait for my request to resolve with some amount of data and then only when the request has actually resolved am I going to dispatch an action.
+
+  const request = axios.get('http://jsonplaceholder.typicode.com/users');
+  return (dispatch) => {
+    request.then
+    dispatch({type: 'FETCH_PROFILES', payload: data})
+  };
+}
+
+-- screenshot of mocup and flow at bam at 145 pm
+- 
 101. Combining Redux and Firebase12:16
 
 102. Dynamic Forms with Redux Form14:42
