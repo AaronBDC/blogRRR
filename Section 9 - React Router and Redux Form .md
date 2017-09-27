@@ -1515,4 +1515,635 @@ export default function(state = {}, action){
 -- so in this section we put together our fetch post action creator and we also added a bit of logic to our reducer to meld that new post into our application level state.
 
 -- next is to make sure the posts show component will actually call that action creator.
-146. Selecting from OwnProps11:27--147. Data Dependencies5:32--148. Caching Records6:13--149. Deleting a Post9:25--G150. Wrapup9:10--151. Rallycoding0:00--
+146. Selecting from OwnProps11:27
+-- in posts_show.js start by importing help connector from react-redux and 
+  import { connect } from 'react-redux';
+
+-- import fetchpost from actions  import { fetchPost } from '../actions';
+-- hook this up to connect helper on export default
+FROM:
+  export default PostsShow;
+
+TO: 
+  export default connect(null, { fetchPost })(PostsShow);
+
+-- we update the PostsShow to have a lifecycle method like before.
+
+-- so now the instant this component appears on the screen we're going to reach out and fetch that post
+
+-- presumably the action creator will fetch that post youll get added to our post piece of state and that means we then need to take that post out of our application level state and get it into our component with a map state to props function.
+
+-- we need to know the ID that sits in the URL 
+
+-- that URL is a very important piece of state because its going to dictate exactly how this component behaves.
+
+-- so to get access to that URL or the little token thats inside that URL I should say,
+we will make access to a prop from that is provided to us from react router
+
+-- so up inside of the componentDidMount, we can access this.props.match.params.id; 
+-- we get this.props.match.params.id directly provided by react router 
+-- with react router, the match right here is the top level property:
+ this.props.match.params.id; 
+
+-- the params property inside of it is an object that lists all the different wildcard tokens that exist inside the URL.
+
+-- so if we go back to the src  index.js file and we find our route's definition we're not only limited to having one wildcard inside the URL right here
+-- we could just as easily have maybe a comment Id as well, if we wanted to look up a very particular comment if you know we imagine we had comments 
+
+  <Route path="/posts/:id/:commentId" component={PostsShow}>-- so that params object will contain all the different wildcard values that exist inside of our given URL
+
+-- in this case we only have the ideal one an so of course we're just saying yep we just want to get access to the ID out of the URL.
+
+-- again, we need to make sure that this id gets passed to fetch post right here [points to componentDidMount of posts_show.js]
+
+-- he thinks it would be appropriate to assign this to a variable right above it. using a little bit a destructoring:
+
+	const { id } = this.props.match.params;
+        this.props.fetchPost(id);
+
+-- this takes care of fetching an individual post of telling that action creator hey I want a post with this given ID
+
+-- update mapstatetoprops to return { posts }
+
+-- and then inside of the render function because post is this big list of posts we might do something like posts with this.props.match.params.id and that would result in the post we want to show:
+      posts[this.props.match.params.id]
+
+
+-- so you might be thinking yea lets just use mapStateToProps in a similar way there were always used to 
+
+-- REMEMBER: NO BIG DEAL. JUST GO FOR IT!
+
+-- NEW TRICK THIS TIME TO CLEAN UP A LOT OF THE LOGIC INSIDE OF YOUR COMPONENT AND ENABLING YOU WRITE THEM IN A MORE REUSABLE FASHION.
+
+-- THIS LINE EXPECTS WE ARE GOING TO GET THIS HUGE LIST OF POSTS:
+    posts[this.props.match.params.id]
+
+-- however the component really only cares about a very particular post only one individual single post.
+
+-- so rather than passing the big list of posts into this component im going to suggest that we figure out a way instead to only pass in a single post. just the one that we care about.
+
+-- so thats the goal here: I want to say I dont want to make this component rely on a big list of posts. 
+
+-- I want it to always expect to recieve one single component so im going to clean up this line of code [deleted [posts[this.props.match.params.id] and return statement inside of mapstateto props as well]]. 
+
+-- here's the trick we're going to do to make this a little bit more reusable
+
+-- heres our map state to props function and we've said so many times that the first argument to it is our application state but there is a second argument.
+
+-- the second argument is referred to by convention as ownProps.
+
+FROM:
+function mapStateToProps( { posts }){
+
+}
+TO:
+function mapStateToProps( { posts }, ownProps ){
+
+}
+
+-- OwnProps right here is the props objet that is headed or going to this component [points to posts_show class extends component block without function mapStateToProps]
+
+-- so whenver this component is about to be rendered or rerendered on the screen, 
+REMEMBER: mapStateToProps GETS CALLED TO FIGURE OUT WHAT PROPS THE COMPONENT NEEDS AND mapStateToProps is passed all the props that were headed to post show.
+
+-- to put that another way, we could essentially say inside of here [points to render of posts_show between render and return]:
+  this.props === ownProps
+-- says this.props is absolutely equal to own props
+
+-- he removes it immediately after entering it
+
+-- consider that then realize we can return just the single post that we care about which would be posts ownProps match.params.id:
+
+FROM:
+function mapStateToProps( { posts }, ownProps ){
+
+}
+TO:
+  function mapStateToProps( { posts }, ownProps ){
+    return {post: posts[ownProps.match.params.id] };
+  }
+
+-- so now our component is only ever going to recieve the single post that we care about just this one post and not the big list.
+
+-- you might be saying stephen thats so ridiculous we talk about here we still are dealing with a big list of posts inside of this component right here [ppints to posts in return ]
+
+-- we're still dealing with the big list of posts inside the map state to props... whats the difference?
+
+-- well there is a difference in many large applications, its not entirely uncommon to create your map state to props functions in a separate file 
+
+-- so have a completely separate map state to props function completely separate from the actual component.
+
+-- if we had taken that type of approach inside of this application, and said map state to props and a second file and this would only contain PostsShow.
+
+-- thats way more reasonable to say yea this things starts to get more reusable.
+
+-- all of a sudden postsShow can be responsible for just showing a component and really not doing much else.
+
+-- and so it doesnt have that additional data dependecny of getting the big list of posts.
+
+-- and if nothing else it helps to just clean up the actual component right here.
+-- and he thinks it kind of lessens the mental burden of remembering o yeah OK thats abig list of posts, I need to just access the one I really care about.
+
+-- so maybe if our render method needed to refer to the post, we could say:
+  render(){
+    this.props.post 
+   return (
+   )
+
+-- and if we had a helper function we could just say this.props.post which is way more compact than doing something like you know something like this in both locations far more compact far more legible than the otther apprach:
+
+FROM:
+class PostsShow extends React.Component {
+  componentDidMount(){
+    const { id } = this.props.match.params;
+    this.props.fetchPost(id);
+  }
+  helperFunction(){
+    this.props.post;
+  }
+  render(){
+    this.props.post;
+    return(
+      <div>
+        Posts Show!
+      </div>
+    );
+  };
+}
+
+function mapStateToProps( { posts }, ownProps ){
+  return {post: posts[ownProps.match.params.id] };
+  
+TO:
+
+class PostsShow extends React.Component {
+  componentDidMount(){
+    const { id } = this.props.match.params;
+    this.props.fetchPost(id);
+  }
+  helperFunction(){
+    this.props.posts[this.props.match.params.id];
+  }
+  render(){
+    this.props.match.params.id;
+    return(
+      <div>
+        Posts Show!
+      </div>
+    );
+  };
+}
+
+function mapStateToProps( { posts }, ownProps ){
+  return {post: posts[ownProps.match.params.id] };
+}
+
+-- above approach is bad and goes back to original by deleting line between render and reutnr and helper funciton.
+ 
+-- important technique to remember
+
+-- REMEMBER: WE CAN USE MAP STATE TO PROPS NOT JUST TO SELECT LITTLE PIECES OF STATE OFF THE GLOBAL STATE OBJECTS BUT ALSO DO SOME INTERMEDIATE CALUCLATION OF SORTS INSIDE AS HERE AS WELL [POINTS TO RETURN {POST: POSTS[]'}]
+
+-- so the last step we have to do is to pass in map state to props to the connect funciton
+
+FROM:
+
+export default connect(null, { fetchPost })(PostsShow);
+
+TO:
+
+export default connect(mapStateToProps, { fetchPost })(PostsShow);
+
+-- screenshot at bam taken at 933 showing the semi colon at the end of the return statement. says its his mistake.
+
+-- another screenshot taken at bam 934 to show both semi colons in render and return of posts_show.js
+
+FROM:
+  render(){
+    return(
+      <div>
+        Posts Show!
+      </div>
+    );
+  };
+  
+TO:
+
+  render(){
+    return(
+      <div>
+        Posts Show!
+      </div>
+    );
+  }
+147. Data Dependencies5:32-- the last thing that we have to do inside of our post show component is take the post we were seeing as a prop and show it inside the render funciton.
+
+-- so rather than showing the hard coded text of Posts Show! , we'd like to show the post title categories all that kinda good stuff.
+
+-- use alittle bit of markup to show details about the particular post
+
+-- because we're going to refer back to ths post a couple of times,
+ use some destructoring
+ -- so we'll say const post is coming from this.props than inside
+ 
+--update render of posts_show:
+  render(){
+    const { post } = this.props;
+    return(
+      <div>
+        <h3>{post.title}</h3>
+        <h6>Categories:{post.categories}</h6>
+        <p>{post.content}</p>
+      </div>
+    );
+  }
+  
+
+-- why did we use a <p> paragraph tag for post.conent?
+-- when we render this component in the browser,
+we should reach out to fetch the given post.
+
+-- once we get the post back, 
+we select it from the post object. (thats our application state)
+
+-- then we will render some details about it on the screen
+
+-- save and test in browser
+
+-- first we need to make sure we render a post that we have an Id for
+
+-- inside of network console, i need to refresh the page while im specifically looking at my list of posts, look at an individual request, find the ID for one of my existing posts on this list.
+
+-- screenshot of succes on genie.local destop at 944amm
+
+ex:  id: 147217
+
+-- test -- i should be able to navigate to post 147217:
+
+    localhost:8080/posts/147217
+    
+-- do make sure that youre using a very real post ID right here
+-- if you are not using a real post id ou wil lnot see anythgin appear on the screen
+
+--test it out localhost:8080/posts/147217
+
+-- EXPECTED FAILURE/ERROR
+  
+-- ERROR SCREENSHOT AT 947 AT GENIE.LOCAL DESKTOP
+
+--ERROR: Uncaught TypeError: Cannot read property 'title' of undefined
+
+t PostsShow.render (bundle.js:51497)
+    at ReactCompositeComponentWrapper._renderValidatedComponentWithoutOwnerOrContext (bundle.js:7803)
+    at ReactCompositeComponentWrapper._renderValidatedComponent (bundle.js:7823)
+    at ReactCompositeComponentWrapper.wrapper [as _renderValidatedComponent] (bundle.js:1554)
+    at ReactCompositeComponentWrapper.mountComponent (bundle.js:7436)
+    at ReactCompositeComponentWrapper.wrapper [as mountComponent] (bundle.js:1554)
+    at Object.mountComponent (bundle.js:5746)
+    at ReactCompositeComponentWrapper.mountComponent (bundle.js:7441)
+    at ReactCompositeComponentWrapper.wrapper [as mountComponent] (bundle.js:1554)
+    at Object.mountComponent (bundle.js:5746)
+render @ bundle.js:51497
+_renderValidatedComponentWithoutOwnerOrContext @ bundle.js:7803
+_renderValidatedComponent @ bundle.js:7823
+ReactCompositeComponent__renderValidatedComponent @ bundle.js:1554
+mountComponent @ bundle.js:7436
+ReactCompositeComponent_mountComponent @ bundle.js:1554
+mountComponent @ bundle.js:5746
+mountComponent @ bundle.js:7441
+ReactCompositeComponent_mountComponent @ bundle.js:1554
+mountComponent @ bundle.js:5746
+mountComponent @ bundle.js:7441
+ReactCompositeComponent_mountComponent @ bundle.js:1554
+mountComponent @ bundle.js:5746
+mountComponent @ bundle.js:7441
+ReactCompositeComponent_mountComponent @ bundle.js:1554
+mountComponent @ bundle.js:5746
+mountChildren @ bundle.js:14316
+_createContentMarkup @ bundle.js:11491
+mountComponent @ bundle.js:11379
+mountComponent @ bundle.js:5746
+mountComponent @ bundle.js:7441
+ReactCompositeComponent_mountComponent @ bundle.js:1554
+mountComponent @ bundle.js:5746
+mountComponent @ bundle.js:7441
+ReactCompositeComponent_mountComponent @ bundle.js:1554
+mountComponent @ bundle.js:5746
+mountComponent @ bundle.js:7441
+ReactCompositeComponent_mountComponent @ bundle.js:1554
+mountComponent @ bundle.js:5746
+mountComponent @ bundle.js:7441
+ReactCompositeComponent_mountComponent @ bundle.js:1554
+mountComponent @ bundle.js:5746
+mountComponentIntoNode @ bundle.js:2750
+perform @ bundle.js:6853
+batchedMountComponentIntoNode @ bundle.js:2766
+perform @ bundle.js:6853
+batchedUpdates @ bundle.js:10890
+batchedUpdates @ bundle.js:6358
+_renderNewRootComponent @ bundle.js:2960
+ReactMount__renderNewRootComponent @ bundle.js:1554
+_renderSubtreeIntoContainer @ bundle.js:3034
+render @ bundle.js:3054
+React_render @ bundle.js:1554
+(anonymous) @ bundle.js:94
+__webpack_require__ @ bundle.js:20
+(anonymous) @ bundle.js:47
+__webpack_require__ @ bundle.js:20
+(anonymous) @ bundle.js:40
+(anonymous) @ bundle.js:43
+util.js:228 Google Maps API warning: NoApiKeys https://developers.google.com/maps/documentation/javascript/error-messages#no-api-keys
+UB.j @ util.js:228
+(anonymous) @ js:140
+(anonymous) @ js:63
+(anonymous) @ js:61
+(anonymous) @ js:63
+(anonymous) @ js:116
+(anonymous) @ js:61
+(anonymous) @ js:116
+(anonymous) @ js:61
+(anonymous) @ js:116
+fe @ js:63
+ee.na @ js:116
+(anonymous) @ util.js:1
+js:40 Google Maps API error: MissingKeyMapError https://developers.google.com/maps/documentation/javascript/error-messages#missing-key-map-error
+_.Ub @ js:40
+(anonymous) @ common.js:51
+(anonymous) @ common.js:193
+c @ common.js:45
+(anonymous) @ AuthenticationService.Authenticate?1shttp%3A%2F%2Flocalhost%3A8080%2Fposts%2F147217&callback=_xdc_._vd61re&token=107726:1
+
+-- should see something about cannot read property title of undefined.
+
+-- whats going on here [look at posts_show commponent]
+
+-- think about order of operations
+
+-- when this is component is first rendered to the screen,
+
+it then calls the componentDidMount gets called to fetchour post
+
+--then once we fetch post, redux,,, connect...compnent rerenders and shows details ont he screen.
+
+-- they key is the first part of the flow - the component is rendered one time before its fetched our first post.
+
+-- during that time before we even attempted to fetch our post we dont have any post with the correct ID sitting in memory.
+
+-- so when we tried to reach into oru big object containing all these posts this satement down here return { post: posts [ownProps..]} will return undefined.
+
+-- and so post of undefined will be passed into our aplpication or into our component.
+
+-- and so we are literally trying to look at the property title of undefined essentially post right here is coming in as undefined to our application [points to const {post} of render method in posts_show.js]
+
+-- to resolve this we can add a little bit of a check to our render method inside of here before we try to access any of the nested properties on the post itself.
+
+-- we can look at the post and we can say hey if we dont have one, 
+how bout instead of trying to return this big blockof JSX down here, 
+lets just return a div that contains the text loading... like so:
+
+-- so now if we render this component when a post has not yet been fetchd correcltly, we'll show the loading div and then once the post is fetched and this component renders, we will then have a post available and will hit this block of JSX instead [points to return post title etc].
+
+  render(){
+    const { post } = this.props;
+
+    if (!post){
+      return <div>Loading...</div>;
+    }
+    return(
+      <div>
+        <h3>{post.title}</h3>
+        <h6>Categories: {post.categories}</h6>
+        <p>{post.content}</p>
+      </div>
+    );
+  }
+  
+-- save and refresh browser to test to see if we see the post appear on the screen
+
+http://localhost:8080/posts/147217
+
+-- success screenshot on genie.local at 959
+
+-- all on track and on PAR
+
+-- he wants to let me know that data issues like this where you would try to access properties on an element or a record that does not yet exist is something that you are going to run up against inside of react and redux just all the time on your personal projects. I guarantee you are going to run into this issue right here.
+
+-- so whenever you start to see messages appear on the screen like cannot read property title is undefined, do double check to make sure that the record youre trying to access actually exists. 
+
+-- and if it does not, you can add in a simple check to say well if we dont have that data yet no problem just do something else.
+
+
+
+148. Caching Records6:13--the last two things
+1- make Back to index button
+- update posts_show with link tag from react-router-dom.
+- inside of render function, place a linked tag we'll tell it to render the user or something.
+- refreshin the browser to test
+-- sucess screenshot taken at genie llcoal desktop 1006 am
+
+
+2- make back button
+-- lets make sure the user has the ability to navigate from clicking right here and going to the show page for each particular or each particular post.
+
+-- again, were going to use the link tag inside of our post index component
+
+-- since we already imported the Link tag, 
+we just wrap the post title insode of the render post function with another link:
+
+        <li className="list-group-item" key= {post.id}>
+          <Link to={`/posts/${post.id}`}>
+            {post.title}  
+          </Link>
+          
+-- save and  test this inside of browser
+-- sUCCES SCREENSHOT at genie at 1011 and 1012
+
+-- notice we are fetching each record TWICE (once for the index page) and (once for the show page)
+
+-- he says for me personally, that is how I always construct pages I always assume that we're working with stale data becauase you never know how long a user has been sitting at this index page.
+
+-- and so i always want to refetch records whenever i go to the show page.
+
+-- if you are working on an application and you are really really concerned about network usage, you could always add a check inside of the post show component.
+
+-- goto posts_show.js and look at componentdid mount 
+
+-- if you did not want to eagerly refetch posts you can always wrap this thing with an if statement. [points at component did mount] 
+
+  componentDidMount(){
+    if (!this.props.post){
+      const { id } = this.props.match.params;
+      this.props.fetchPost(id);
+    }
+  }
+  
+-- test to see if it works in the browser
+
+-- success screnesnhot at genie at 1019 showing one fetch instead of two
+
+
+-- COMEBACK AND EXPLAIN WHY ITS SO FAST
+-- ON TRACK AND ON PAR
+149. Deleting a Post9:25-- screenshot at bam at 1021 of mockup of delete post button
+
+-- 
+
+  onDeleteClick(){
+    const { id } = this.props.match.params;
+    this.props.deletePost(id);
+  }
+  
+could do it this way bad
+
+  onDeleteClick(){
+    const { id } = this.props.match.params;
+    this.props.deletePost(this.props.post.id);
+  }
+  
+-- its bad approach because it assumes that they post is in existence inside this component.
+-- it assumes we have fetched the posts already
+-- this component here will render on the screen without the post being availalble.
+-- so he thinks its a bit more risky to refer to the post on props. its way more reasonable to look at params object.
+-- the params object is always going to have the ID available and so we dont really ever have to think about it at all.
+
+-- we are working backwards here, 
+-- we are going to continue this kind of backwards flow by importing the action creator from the actions file:
+
+import { fetchPost, deletePost } from '../actions';
+
+--now were going to wire it up to our connect helper at the bototm of the file.
+
+-- update acitons.js
+
+
+--define export function deletePost
+
+export function deletePost(id){
+  const request = axios.delete(`${ROOT_URL}/posts/${id}${API_KEY}`);
+  return{
+    type: DELETE_POST,
+    payload: id
+  };
+}
+
+--navigate user back to post after delete
+
+export function deletePost(id, callback){
+  const request = axios.delete(`${ROOT_URL}/posts/${id}${API_KEY}`)
+  .then(() => callback());
+  
+and 
+class PostsShow extends React.Component {
+  componentDidMount(){
+    //optional to leave out for stale data vs network usage concerns
+    if (!this.props.post){
+      const { id } = this.props.match.params;
+      this.props.fetchPost(id);
+   }
+  }
+  onDeleteClick(){
+    const { id } = this.props.match.params;
+    this.props.deletePost(id, ()=> {
+      this.props.history.push('/');
+    });
+  }
+  
+-- save and retest in browser to see if we can go back to list of posts, refresh the page and click on post to see big red button the side for delete post, click the button, see the post required or the delete request come up and then automatically navigate back to the index.
+
+-- screenshot success at genie local 1038 and 1039
+-- delete post works!
+
+-- expected error in console
+
+--ERROR: 
+bundle.js:49676 Uncaught ReferenceError: DELETE_POST is not defined
+    at deletePost (bundle.js:49676)
+    at Object.deletePost (bundle.js:21191)
+    at PostsShow.onDeleteClick (bundle.js:51514)
+    at Object.ReactErrorUtils.invokeGuardedCallback (bundle.js:4556)
+    at executeDispatch (bundle.js:4356)
+    at Object.executeDispatchesInOrder (bundle.js:4379)
+    at executeDispatchesAndRelease (bundle.js:3809)
+    at executeDispatchesAndReleaseTopLevel (bundle.js:3820)
+    at Array.forEach (<anonymous>)
+    at forEachAccumulated (bundle.js:4656)
+deletePost @ bundle.js:49676
+(anonymous) @ bundle.js:21191
+onDeleteClick @ bundle.js:51514
+ReactErrorUtils.invokeGuardedCallback @ bundle.js:4556
+executeDispatch @ bundle.js:4356
+executeDispatchesInOrder @ bundle.js:4379
+executeDispatchesAndRelease @ bundle.js:3809
+executeDispatchesAndReleaseTopLevel @ bundle.js:3820
+forEachAccumulated @ bundle.js:4656
+processEventQueue @ bundle.js:4025
+runEventQueueInBatch @ bundle.js:4685
+handleTopLevel @ bundle.js:4701
+handleTopLevelWithoutPath @ bundle.js:14907
+handleTopLevelImpl @ bundle.js:14887
+perform @ bundle.js:6853
+batchedUpdates @ bundle.js:10890
+batchedUpdates @ bundle.js:6358
+dispatchEvent @ bundle.js:15018
+
+-- on track and on par
+
+
+G150. Wrapup9:10-- update top of action creator
+
+FROM:
+
+
+export const FETCH_POSTS = 'fetch_posts';
+export const FETCH_POST = 'fetch_post';
+export const CREATE_POSTS = 'create_posts';
+
+
+TO:
+
+export const FETCH_POSTS = 'fetch_posts';
+export const FETCH_POST = 'fetch_post';
+export const CREATE_POSTS = 'create_posts';
+export const DELETE_POST = 'delete_post';
+
+
+
+-- save and rest in browser
+
+-- SUCCESS SCREENSHOT at genie.loca at 1041 desktop showing no error in console and clean network XHR traffic
+
+-- snappier uI - lets handle it better
+
+-- import delete post
+
+-- lodash omit -- what it does right here is says look at the state object.
+if the state object has a key of the posts id jsut drop it
+-- just omit it from the object and return a new object that does not contian that id anymore
+-- so this does not modify the existing state object and returns a new state object with that particular post id not present anymore
+
+-- so this is part of whats so great about using an object rather than array for state management.
+
+-- you can imagine i fyou are using an array here we ould have to write in a reject funciton
+      return _.reject(state, post => post.id === action.payload);
+      
+-- above is definatley not quite as legible
+-- omit is more obvious as to whats going on - and actually this would be post ID
+
+-- so i personally like using an object as our application level state
+
+-- save and refresh browser to retest to see if we will delete this post and right away we see that things just get out there and we're good to go.
+
+-- succes screenshot at genie at 1049 and 1050 and 1051 showing the refresh, the page for post detail and deleting the post. with no errors in console
+
+-- @COME BACK AND GET WRAP UP 
+
+-- peep some javascript library called reselect
+
+-- peep bonus video about fine detailing applicaiton state.
+
+
+
+
+151. Rallycoding0:00--
+
+RallycodingSection 9, Lecture 151Be sure to check out RallyCoding.  You'll find a lot of helpful blog posts, new courses, and all kinds of other stuff!Interested in any of my other courses?  Pick them up for just $10!React Native: Advanced Concepts - https://www.udemy.com/react-native-advanced/?couponCode=4MORE1234GraphQL With React: The Complete Developer's Guide - https://www.udemy.com/graphql-with-react-course/?couponCode=4MORE1234Webpack 2: The Complete Developer's Guide - https://www.udemy.com/webpack-2-the-complete-developers-guide/?couponCode=4MORE1234MongoDB with NodeJS - https://www.udemy.com/the-complete-developers-guide-to-mongodb/?couponCode=4MORE1234Elixir with Phoenix - https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/?couponCode=4MORE1234ES6 Javascript - https://www.udemy.com/javascript-es6-tutorial/?couponCode=4MORE1234Meteor with React for Realtime Apps - https://www.udemy.com/meteor-react-tutorial/?couponCode=4MORE1234Advanced React with Redux - https://www.udemy.com/react-redux-tutorial/?couponCode=4MORE1234Electron for Desktop Apps - https://www.udemy.com/electron-react-tutorial/?couponCode=4MORE1234-- APP DONE FINAL CO
